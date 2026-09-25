@@ -180,45 +180,6 @@
     .step-title{font-family:'Pally',sans-serif;font-weight:700;font-size:13px;color:var(--y1);margin-bottom:0.4rem;}
     .step-desc{font-size:12px;color:var(--y1);opacity:0.5;line-height:1.7;}
 
-    /* EXCLUSIVOS */
-    section.exclusivos{background:var(--wh);}
-    section.exclusivos .sec-tag{background:var(--bo);color:var(--y2);}
-    section.exclusivos .sec-title{color:var(--bo);}
-    .exclusivos-desc{max-width:520px;font-size:14px;color:var(--bo);opacity:0.65;line-height:1.8;margin-top:-1.5rem;margin-bottom:2.5rem;}
-    .ex-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.5rem;}
-    .ex-card{
-      background:var(--wh);border-radius:16px;overflow:hidden;
-      border:1px solid rgba(59,15,18,0.08);box-shadow:0 4px 18px rgba(59,15,18,0.07);
-      display:flex;flex-direction:column;transition:transform 0.2s;
-    }
-    .ex-card:hover{transform:translateY(-4px);}
-    .ex-card .gallery{background:var(--y1);}
-    .ex-card .ex-body{padding:1.1rem 1.2rem 1.4rem;display:flex;flex-direction:column;gap:0.45rem;}
-    .ex-card .ex-name{font-family:'Pally',sans-serif;font-weight:700;font-size:16px;color:var(--bo);}
-    .ex-card .ex-desc{font-size:12.5px;color:var(--bo);opacity:0.62;line-height:1.6;}
-    .ex-card .ex-meta{font-size:11px;color:var(--bo);opacity:0.5;letter-spacing:0.03em;}
-    .ex-card .ex-row{display:flex;align-items:center;justify-content:space-between;margin-top:0.5rem;gap:0.75rem;}
-    .ex-card .ex-price{font-family:'Pally',sans-serif;font-weight:700;font-size:15px;color:var(--bo);white-space:nowrap;}
-    .ex-btn{
-      display:inline-flex;align-items:center;justify-content:center;
-      background:var(--bo);color:var(--y1);padding:8px 18px;border-radius:50px;
-      text-decoration:none;font-family:'Pally',sans-serif;font-weight:700;
-      font-size:11px;letter-spacing:0.05em;text-transform:uppercase;
-      transition:opacity 0.2s,transform 0.2s;white-space:nowrap;
-    }
-    .ex-btn:hover{opacity:0.85;transform:scale(1.03);}
-    .ex-photo-pending{
-      width:100%;height:100%;display:flex;align-items:center;justify-content:center;
-      background:repeating-linear-gradient(45deg,var(--y1),var(--y1) 10px,var(--y2) 10px,var(--y2) 20px);
-      font-family:'Pally',sans-serif;font-weight:700;font-size:11px;letter-spacing:0.05em;
-      text-transform:uppercase;color:var(--bo);opacity:0.6;text-align:center;padding:1rem;
-    }
-
-    /* PRECIO + CANTIDAD EN CADA CARD */
-    .card-buy{display:flex;align-items:center;justify-content:space-between;width:100%;padding:0.6rem 0.7rem 0 0.7rem;margin-top:0.15rem;gap:0.5rem;}
-    .card-price{font-family:'Pally',sans-serif;font-weight:700;font-size:14px;color:var(--bo);white-space:nowrap;}
-    .qty-stepper{display:flex;align-items:center;gap:0.55rem;background:var(--y1);border-radius:20px;padding:4px 6px;}
-    .ex-card .qty-stepper{background:var(--y1);}
     .qty-btn{
       width:22px;height:22px;border-radius:50%;border:none;background:var(--bo);color:var(--y1);
       font-family:'Pally',sans-serif;font-weight:700;font-size:14px;line-height:1;
@@ -409,6 +370,27 @@
       .steps{grid-template-columns:1fr;}
       .hero-logo{width:80vw;}
     }
+
+    /* RECETARIO */
+    section.recetario{background:var(--bo);padding:4rem 2rem 4.5rem;}
+    section.recetario .sec-tag{background:var(--y1);color:var(--bo);}
+    section.recetario .sec-title{color:var(--wh);}
+    .recetario-desc{max-width:480px;font-size:14px;color:var(--wh);opacity:0.72;line-height:1.8;margin-top:-1rem;margin-bottom:2rem;}
+    .recetario-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:center;max-width:900px;}
+    .recetario-visual{background:var(--y1);border-radius:16px;padding:2.5rem 2rem;display:flex;flex-direction:column;align-items:center;gap:1rem;text-align:center;}
+    .recetario-icon{font-size:3.5rem;line-height:1;}
+    .recetario-visual-title{font-family:'Pally',sans-serif;font-weight:700;font-size:20px;color:var(--bo);}
+    .recetario-visual-sub{font-size:12.5px;color:var(--bo);opacity:0.65;line-height:1.6;}
+    .recetario-info{display:flex;flex-direction:column;gap:1.25rem;}
+    .recetario-feature{display:flex;gap:0.75rem;align-items:flex-start;}
+    .recetario-feature-icon{font-size:1.2rem;margin-top:2px;flex-shrink:0;}
+    .recetario-feature-text{font-size:13px;color:var(--wh);opacity:0.82;line-height:1.6;}
+    .recetario-feature-text strong{font-family:'Pally',sans-serif;font-weight:700;opacity:1;display:block;margin-bottom:1px;}
+    .btn-recetario{display:inline-block;background:var(--y2);color:var(--bo);font-family:'Pally',sans-serif;font-weight:700;font-size:15px;border-radius:50px;padding:0.85rem 2rem;text-decoration:none;margin-top:0.5rem;transition:transform 0.18s,opacity 0.18s;}
+    .btn-recetario:hover{transform:translateY(-2px);opacity:0.9;}
+    .recetario-price{font-family:'Pally',sans-serif;font-weight:700;font-size:24px;color:var(--y2);margin-top:0.25rem;}
+    .recetario-price span{font-size:13px;font-weight:400;opacity:0.65;display:block;font-family:inherit;}
+    @media(max-width:700px){.recetario-grid{grid-template-columns:1fr;}}
   </style>
 </head>
 <body>
@@ -418,8 +400,9 @@
     <div class="dot"></div>
     <a href="#productos">Productos</a>
     <div class="dot"></div>
-    <a href="#exclusivos">Exclusivos</a>
+    
     <div class="dot"></div>
+    <a href="#recetario">Recetario</a>
     <a href="#como-pedir">Cómo pedir</a>
     <div class="dot"></div>
     <a href="#nosotros">Nosotros</a>
@@ -478,7 +461,8 @@
   <div class="mobile-menu" id="mobileMenu">
     <a href="#hero" onclick="toggleMenu()">Inicio</a>
     <a href="#productos" onclick="toggleMenu()">Productos</a>
-    <a href="#exclusivos" onclick="toggleMenu()">Exclusivos</a>
+    
+    <a href="#recetario" onclick="toggleMenu()">Recetario</a>
     <a href="#como-pedir" onclick="toggleMenu()">Cómo pedir</a>
     <a href="#nosotros" onclick="toggleMenu()">Nosotros</a>
     <a href="#contacto" onclick="toggleMenu()">Contacto</a>
@@ -516,7 +500,7 @@
 Rellenas de dulce de leche o pasta de avellanas</div>
           <div class="tag">la clásica</div>
         
-          <div class="card-buy"><span class="card-price">$3.500</span><div class="qty-stepper" data-product="mola-cookie"><button class="qty-btn" data-action="minus" type="button" aria-label="Quitar uno">&#8722;</button><span class="qty-value">0</span><button class="qty-btn" data-action="plus" type="button" aria-label="Agregar uno">+</button></div></div>
+          <div class="card-buy"><span class="card-price">$3.600</span><div class="qty-stepper" data-product="mola-cookie"><button class="qty-btn" data-action="minus" type="button" aria-label="Quitar uno">&#8722;</button><span class="qty-value">0</span><button class="qty-btn" data-action="plus" type="button" aria-label="Agregar uno">+</button></div></div>
         </div>
         <div class="card reveal d1">
           <div class="gallery"><div class="gallery-track"><div class="gallery-item"><img src="./img/cocodul-de-cerca.webp" alt="Cocodul de cerca" loading="lazy"></div><div class="gallery-item"><img src="./img/cocodul-entera.webp" alt="Cocodul entera" loading="lazy"></div><div class="gallery-item"><img src="./img/cocodul-partida-a-la-mitad.webp" alt="Cocodul partida a la mitad" loading="lazy"></div></div><div class="gallery-dots"><span class="dot active"></span><span class="dot"></span><span class="dot"></span></div><button class="gallery-arrow prev" type="button" aria-label="Foto anterior">&#8249;</button><button class="gallery-arrow next" type="button" aria-label="Foto siguiente">&#8250;</button></div>
@@ -525,7 +509,7 @@ Rellenas de dulce de leche o pasta de avellanas</div>
 Rellena de dulce de leche</div>
           <div class="tag">tropical</div>
         
-          <div class="card-buy"><span class="card-price">$3.200</span><div class="qty-stepper" data-product="cocodul"><button class="qty-btn" data-action="minus" type="button" aria-label="Quitar uno">&#8722;</button><span class="qty-value">0</span><button class="qty-btn" data-action="plus" type="button" aria-label="Agregar uno">+</button></div></div>
+          <div class="card-buy"><span class="card-price">$3.300</span><div class="qty-stepper" data-product="cocodul"><button class="qty-btn" data-action="minus" type="button" aria-label="Quitar uno">&#8722;</button><span class="qty-value">0</span><button class="qty-btn" data-action="plus" type="button" aria-label="Agregar uno">+</button></div></div>
         </div>
         <div class="card reveal d2">
           <div class="gallery"><div class="gallery-track"><div class="gallery-item"><img src="./img/chocobomba-entera.webp" alt="Chocobomba entera" loading="lazy"></div><div class="gallery-item"><img src="./img/chocobomba-partida-a-la-mitad.webp" alt="Chocobomba partida a la mitad" loading="lazy"></div></div><div class="gallery-dots"><span class="dot active"></span><span class="dot"></span></div><button class="gallery-arrow prev" type="button" aria-label="Foto anterior">&#8249;</button><button class="gallery-arrow next" type="button" aria-label="Foto siguiente">&#8250;</button></div>
@@ -543,7 +527,7 @@ Rellena de ganache de chocolate y escamas de sal.</div>
 Rellena de dulce de leche y oreo</div>
           <div class="tag">favorita</div>
         
-          <div class="card-buy"><span class="card-price">$3.400</span><div class="qty-stepper" data-product="oreo"><button class="qty-btn" data-action="minus" type="button" aria-label="Quitar uno">&#8722;</button><span class="qty-value">0</span><button class="qty-btn" data-action="plus" type="button" aria-label="Agregar uno">+</button></div></div>
+          <div class="card-buy"><span class="card-price">$3.500</span><div class="qty-stepper" data-product="oreo"><button class="qty-btn" data-action="minus" type="button" aria-label="Quitar uno">&#8722;</button><span class="qty-value">0</span><button class="qty-btn" data-action="plus" type="button" aria-label="Agregar uno">+</button></div></div>
         </div>
         <div class="card reveal d3">
           <div class="gallery"><div class="gallery-track"><div class="gallery-item"><img src="./img/white-cookie-entera.webp" alt="White Cookie entera" loading="lazy"></div><div class="gallery-item"><img src="./img/white-cookie-partida-a-la-mitad.webp" alt="White Cookie partida a la mitad" loading="lazy"></div></div><div class="gallery-dots"><span class="dot active"></span><span class="dot"></span></div><button class="gallery-arrow prev" type="button" aria-label="Foto anterior">&#8249;</button><button class="gallery-arrow next" type="button" aria-label="Foto siguiente">&#8250;</button></div>
@@ -579,90 +563,52 @@ Con un relleno de maní y en la deco un clásico bon o bon!</div>
           <div class="tag">nueva</div>
           <div class="card-buy"><span class="card-price">$3.500</span><div class="qty-stepper" data-product="marmolada"><button class="qty-btn" data-action="minus" type="button" aria-label="Quitar uno">&#8722;</button><span class="qty-value">0</span><button class="qty-btn" data-action="plus" type="button" aria-label="Agregar uno">+</button></div></div>
         </div>
+        <div class="card reveal d3">
+          <div class="gallery"><div class="gallery-track"><div class="gallery-item"><img src="./img/box-de-mini-cookies-abierto.webp" alt="Box de mini cookies abierto" loading="lazy"></div><div class="gallery-item"><img src="./img/box-de-mini-cookies-cerrado.webp" alt="Box de mini cookies cerrado" loading="lazy"></div><div class="gallery-item"><img src="./img/box-de-mini-cookies-detalle.webp" alt="Box de mini cookies detalle" loading="lazy"></div></div><div class="gallery-dots"><span class="dot active"></span><span class="dot"></span><span class="dot"></span></div><button class="gallery-arrow prev" type="button" aria-label="Foto anterior">&#8249;</button><button class="gallery-arrow next" type="button" aria-label="Foto siguiente">&#8250;</button></div>
+          <div class="name">Mini Box</div>
+          <div class="desc">Una selección de mini cookies ideal para compartir, regalar o probar distintos sabores en una sola presentación. 30 unidades · sabores surtidos.</div>
+          <div class="tag">para compartir</div>
+          <div class="card-buy"><span class="card-price">$12000</span><div class="qty-stepper" data-product="mini-box"><button class="qty-btn" data-action="minus" type="button" aria-label="Quitar uno">&#8722;</button><span class="qty-value">0</span><button class="qty-btn" data-action="plus" type="button" aria-label="Agregar uno">+</button></div></div>
+        </div>
+        <div class="card reveal d4">
+          <div class="gallery"><div class="gallery-track"><div class="gallery-item"><img src="./img/cookie-cuacker-entera.webp" alt="Cookie Cuacker entera" loading="lazy"></div><div class="gallery-item"><img src="./img/cookie-cuacker-partida.webp" alt="Cookie Cuacker partida" loading="lazy"></div></div><div class="gallery-dots"><span class="dot active"></span><span class="dot"></span></div><button class="gallery-arrow prev" type="button" aria-label="Foto anterior">&#8249;</button><button class="gallery-arrow next" type="button" aria-label="Foto siguiente">&#8250;</button></div>
+          <div class="name">Cookie Cuacker</div>
+          <div class="desc">Pepa de vainilla con una capa fina de dulce de leche y bombones quacker caseros.</div>
+          <div class="tag">el turrón</div>
+          <div class="card-buy"><span class="card-price">$3.700</span><div class="qty-stepper" data-product="cuacker"><button class="qty-btn" data-action="minus" type="button" aria-label="Quitar uno">&#8722;</button><span class="qty-value">0</span><button class="qty-btn" data-action="plus" type="button" aria-label="Agregar uno">+</button></div></div>
+        </div>
         </div>
 
     </section>
 
-    <section class="exclusivos" id="exclusivos">
+
+    <section class="recetario" id="recetario">
       <div class="reveal">
-        <span class="sec-tag">ediciones especiales</span>
-        <h2 class="sec-title">Exclusivos</h2>
-        <p class="exclusivos-desc">Descubrí nuestras cookies exclusivas, elaboradas en ediciones especiales y con combinaciones únicas para quienes buscan algo diferente.</p>
+        <span class="sec-tag">para los que quieren más</span>
+        <h2 class="sec-title">Recetario<br>MOLA</h2>
+        <p class="recetario-desc">¿Querés cocinar tus propias cookies? Te mandamos el recetario en PDF con todas nuestras recetas favoritas.</p>
       </div>
-      <div class="ex-grid">
-        <div class="ex-card reveal d1">
-          <div class="gallery">
-            <div class="gallery-track">
-              <div class="gallery-item"><img src="./img/limola-vista-superior.webp" alt="Limola vista superior" loading="lazy"></div>
-              <div class="gallery-item"><img src="./img/limola-partida-a-la-mitad.webp" alt="Limola partida a la mitad" loading="lazy"></div>
-            </div>
-            <div class="gallery-dots"><span class="dot active"></span><span class="dot"></span></div>
-            <button class="gallery-arrow prev" type="button" aria-label="Foto anterior">&#8249;</button>
-            <button class="gallery-arrow next" type="button" aria-label="Foto siguiente">&#8250;</button>
-          </div>
-          <div class="ex-body">
-            <div class="ex-name">Limola</div>
-            <div class="ex-desc">Cookie de vainilla y limón con trozos de chocolate cobertura blanco y galletitas de vainilla. 
-Rellenas de curd de limón</div>
-            <div class="ex-meta">edición limitada · ya no disponible</div>
-          </div>
+      <div class="recetario-grid reveal d1">
+        <div class="recetario-visual">
+          <div class="recetario-icon">📖</div>
+          <div class="recetario-visual-title">Recetario MOLA</div>
+          <div class="recetario-visual-sub">PDF · recetas exclusivas<br>para hacer en casa</div>
+          <div class="recetario-price">$12.000 <span>precio por el PDF</span></div>
         </div>
-        <div class="ex-card reveal d2">
-          <div class="gallery"><div class="gallery-track"><div class="gallery-item"><img src="./img/box-de-mini-cookies-abierto.webp" alt="Box de mini cookies abierto" loading="lazy"></div><div class="gallery-item"><img src="./img/box-de-mini-cookies-cerrado.webp" alt="Box de mini cookies cerrado" loading="lazy"></div><div class="gallery-item"><img src="./img/box-de-mini-cookies-detalle.webp" alt="Box de mini cookies detalle" loading="lazy"></div></div><div class="gallery-dots"><span class="dot active"></span><span class="dot"></span><span class="dot"></span></div><button class="gallery-arrow prev" type="button" aria-label="Foto anterior">&#8249;</button><button class="gallery-arrow next" type="button" aria-label="Foto siguiente">&#8250;</button></div>
-          <div class="ex-body">
-            <div class="ex-name">Box de mini cookies</div>
-            <div class="ex-desc">Una selección de mini cookies ideal para compartir, regalar o probar distintos sabores en una sola presentación.</div>
-            <div class="ex-meta">30 unidades · sabores surtidos</div>
-            <div class="ex-row">
-              <span class="ex-price">$12.000</span>
-              <div class="qty-stepper" data-product="box-mini">
-                <button class="qty-btn" data-action="minus" type="button" aria-label="Quitar uno">&#8722;</button>
-                <span class="qty-value">0</span>
-                <button class="qty-btn" data-action="plus" type="button" aria-label="Agregar uno">+</button>
-              </div>
-            </div>
+        <div class="recetario-info">
+          <div class="recetario-feature">
+            <span class="recetario-feature-icon">🍪</span>
+            <div class="recetario-feature-text"><strong>Recetas originales</strong>Todas las cookies de MOLA explicadas paso a paso, con ingredientes y cantidades exactas.</div>
           </div>
-        </div>
-      
-        <div class="ex-card reveal d3">
-          <div class="gallery">
-            <div class="gallery-track">
-              <div class="gallery-item"><img src="./img/kinder-entera.webp" alt="Kinder Bueno entera" loading="lazy"></div>
-              <div class="gallery-item"><img src="./img/kinder-partida-a-la-mitad.webp" alt="Kinder Bueno partida" loading="lazy"></div>
-            </div>
-            <div class="gallery-dots"><span class="dot active"></span><span class="dot"></span></div>
-            <button class="gallery-arrow prev" type="button" aria-label="Foto anterior">&#8249;</button>
-            <button class="gallery-arrow next" type="button" aria-label="Foto siguiente">&#8250;</button>
+          <div class="recetario-feature">
+            <span class="recetario-feature-icon">📲</span>
+            <div class="recetario-feature-text"><strong>Te lo enviamos al instante</strong>Lo recibís directo en WhatsApp en formato PDF, listo para guardar o imprimir.</div>
           </div>
-          <div class="ex-body">
-            <div class="ex-name">Kinder Bueno</div>
-            <div class="ex-desc">Cookie de vainilla con trozos de chocolate cobertura con leche.
-El relleno está hecho con chocolate blanco y barrita Kinder bueno, terminando con una deco de la golosina.</div>
-            <div class="ex-meta">edición especial · ya no disponible</div>
+          <div class="recetario-feature">
+            <span class="recetario-feature-icon">🎁</span>
+            <div class="recetario-feature-text"><strong>Ideal para regalar</strong>Un regalo distinto y especial para los amantes de la cocina.</div>
           </div>
-        </div>
-        <div class="ex-card reveal d4">
-          <div class="gallery">
-            <div class="gallery-track">
-              <div class="gallery-item"><img src="./img/cookie-cuacker-entera.webp" alt="Cookie Cuacker entera" loading="lazy"></div>
-              <div class="gallery-item"><img src="./img/cookie-cuacker-partida.webp" alt="Cookie Cuacker partida" loading="lazy"></div>
-            </div>
-            <div class="gallery-dots"><span class="dot active"></span><span class="dot"></span></div>
-            <button class="gallery-arrow prev" type="button" aria-label="Foto anterior">&#8249;</button>
-            <button class="gallery-arrow next" type="button" aria-label="Foto siguiente">&#8250;</button>
-          </div>
-          <div class="ex-body">
-            <div class="ex-name">Cookie Cuacker</div>
-            <div class="ex-desc">Pepa de vainilla con una capa fina de dulce de leche y bombones quacker caseros.</div>
-            <div class="ex-row">
-              <span class="ex-price">Precio próximamente</span>
-              <div class="qty-stepper" data-product="cuacker">
-                <button class="qty-btn" data-action="minus" type="button" aria-label="Quitar uno">&#8722;</button>
-                <span class="qty-value">0</span>
-                <button class="qty-btn" data-action="plus" type="button" aria-label="Agregar uno">+</button>
-              </div>
-            </div>
-          </div>
+          <a class="btn-recetario reveal d2" href="https://wa.me/5493482251130?text=Hola!%20Me%20gustar%C3%ADa%20pedir%20el%20Recetario%20MOLA%20%F0%9F%93%96" target="_blank">📖 Quiero el Recetario</a>
         </div>
       </div>
     </section>
