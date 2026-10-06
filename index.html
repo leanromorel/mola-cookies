@@ -394,6 +394,16 @@
     .recetario-price{font-family:'Pally',sans-serif;font-weight:700;font-size:24px;color:var(--bo);margin-top:0.25rem;}
     .recetario-price span{font-size:13px;font-weight:400;color:var(--bo);opacity:0.55;display:block;font-family:inherit;}
     @media(max-width:700px){.recetario-grid{grid-template-columns:1fr;}}
+
+    /* CUCHAREABLE VARIANTE */
+    .variant-select{display:flex;gap:0.4rem;margin-bottom:0.2rem;}
+    .variant-btn{
+      font-family:'Pally',sans-serif;font-weight:700;font-size:11px;
+      border:1.5px solid var(--bo);border-radius:20px;padding:3px 10px;
+      background:transparent;color:var(--bo);cursor:pointer;
+      transition:background 0.15s,color 0.15s;white-space:nowrap;
+    }
+    .variant-btn.active{background:var(--bo);color:var(--y1);}
   </style>
 </head>
 <body>
@@ -579,6 +589,17 @@ Con un relleno de maní y en la deco un clásico bon o bon!</div>
           <div class="desc">Pepa de vainilla con una capa fina de dulce de leche y bombones quacker caseros.</div>
           <div class="tag">el turrón</div>
           <div class="card-buy"><span class="card-price">$3.700</span><div class="qty-stepper" data-product="cuacker"><button class="qty-btn" data-action="minus" type="button" aria-label="Quitar uno">&#8722;</button><span class="qty-value">0</span><button class="qty-btn" data-action="plus" type="button" aria-label="Agregar uno">+</button></div></div>
+        <div class="card reveal d1" id="card-cuchareable">
+          <div class="gallery"><div class="gallery-track"><div class="gallery-item"><img src="./img/cuchareable-envase.webp" alt="Cookie Cuchareable" loading="lazy"></div></div><div class="gallery-dots"><span class="dot active"></span></div><button class="gallery-arrow prev" type="button" aria-label="Foto anterior">&#8249;</button><button class="gallery-arrow next" type="button" aria-label="Foto siguiente">&#8250;</button></div>
+          <div class="name">Cookie Cuchareable</div>
+          <div class="desc">Cuchareable de masa de cookie de vainilla y rellena. Sabores a elección.</div>
+          <div class="tag">lo nuevo</div>
+          <div class="variant-select">
+            <button class="variant-btn active" data-price="6000" data-label="sin helado" onclick="selectVariant(this,'cuchareable')">Sin helado</button>
+            <button class="variant-btn" data-price="7500" data-label="con helado" onclick="selectVariant(this,'cuchareable')">Con helado 🍨</button>
+          </div>
+          <div class="card-buy"><span class="card-price" id="price-cuchareable">$6.000</span><div class="qty-stepper" data-product="cuchareable" data-variant="sin helado" data-price="6000"><button class="qty-btn" data-action="minus" type="button" aria-label="Quitar uno">&#8722;</button><span class="qty-value">0</span><button class="qty-btn" data-action="plus" type="button" aria-label="Agregar uno">+</button></div></div>
+        </div>
         </div>
         </div>
 
@@ -771,16 +792,26 @@ Con un relleno de maní y en la deco un clásico bon o bon!</div>
 
     /* CARRITO DE COMPRAS — precios de ejemplo, Gonzalo los edita después */
     const PRODUCTS = {
-      'mola-cookie':  { name: 'MolaCookie',         price: 3500 },
-      'cocodul':      { name: 'Cocodul',             price: 3200 },
-      'chocobomba':   { name: 'Chocobomba',          price: 3600 },
-      'oreo':         { name: 'Oreo',                price: 3400 },
-      'white-cookie': { name: 'WhiteCookie',        price: 3300 },
-      'pistalim':     { name: 'Pistalim',            price: 3500 },
-      'bon-o-bon':    { name: 'Bon o Bon',           price: 3500 },
-      'kinder':       { name: 'Kinder Bueno',              price: 3600 },
-      'box-mini':     { name: 'Box de mini cookies', price: 12000 }
+      'mola-cookie':  { name: 'MolaCookie',         price: 3700 },
+      'cocodul':      { name: 'Cocodul',             price: 3700 },
+      'chocobomba':   { name: 'Chocobomba',          price: 3700 },
+      'oreo':         { name: 'Oreo',                price: 3700 },
+      'white-cookie': { name: 'WhiteCookie',         price: 3700 },
+      'pistalim':     { name: 'Pistalim',            price: 3700 },
+      'bon-o-bon':    { name: 'Bon o Bon',           price: 3700 },
+      'marmolada':    { name: 'Marmolada',           price: 3700 },
+      'cuacker':      { name: 'Cookie Cuacker',      price: 3700 },
+      'mini-box':     { name: 'Mini Box',            price: 12000 },
+      'cuchareable':  { name: 'Cookie Cuchareable',  price: 6000 }
     };
+    function getLivePrice(id) {
+      if (id === 'cuchareable') {
+        var s = document.querySelector('.qty-stepper[data-product="cuchareable"]');
+        if (s && s.dataset.price) return parseInt(s.dataset.price);
+      }
+      return PRODUCTS[id] ? PRODUCTS[id].price : 0;
+    }
+
     const WHATSAPP_NUMBER = '5493482251130';
 
     function formatPrice(n){ return '$' + n.toLocaleString('es-AR'); }
@@ -804,7 +835,7 @@ Con un relleno de maní y en la deco un clásico bon o bon!</div>
     function cartCount(){ return Object.values(cart).reduce(function(a,b){return a+b;}, 0); }
     function cartTotal(){
       return Object.keys(cart).reduce(function(sum, id){
-        return sum + (PRODUCTS[id] ? PRODUCTS[id].price * cart[id] : 0);
+        return sum + getLivePrice(id) * (cart[id] || 0);
       }, 0);
     }
 
@@ -840,11 +871,16 @@ Con un relleno de maní y en la deco un clásico bon o bon!</div>
           itemsEl.innerHTML = entries.map(function(id){
             const p = PRODUCTS[id];
             const qty = cart[id];
-            const subtotal = p.price * qty;
+            const liveP = getLivePrice(id);
+            const subtotal = liveP * qty;
+            const variantLabel = (id === 'cuchareable') ? (function(){
+              var s = document.querySelector('.qty-stepper[data-product="cuchareable"]');
+              return (s && s.dataset.variant) ? ' (' + s.dataset.variant + ')' : '';
+            })() : '';
             return '<div class="cart-item">' +
               '<div class="cart-item-info">' +
-                '<div class="cart-item-name">' + p.name + '</div>' +
-                '<div class="cart-item-sub">' + qty + ' x ' + formatPrice(p.price) + ' = ' + formatPrice(subtotal) + '</div>' +
+                '<div class="cart-item-name">' + p.name + variantLabel + '</div>' +
+                '<div class="cart-item-sub">' + qty + ' x ' + formatPrice(liveP) + ' = ' + formatPrice(subtotal) + '</div>' +
               '</div>' +
               '<div class="qty-stepper" data-product="' + id + '">' +
                 '<button class="qty-btn" data-action="minus" type="button" aria-label="Quitar uno">&#8722;</button>' +
@@ -895,7 +931,12 @@ Con un relleno de maní y en la deco un clásico bon o bon!</div>
         entries.forEach(function(id){
           const p = PRODUCTS[id];
           const qty = cart[id];
-          lines.push('• ' + qty + 'x ' + p.name + ' — ' + formatPrice(p.price * qty));
+          const liveP = getLivePrice(id);
+          const variantLabel = (id === 'cuchareable') ? (function(){
+            var s = document.querySelector('.qty-stepper[data-product="cuchareable"]');
+            return (s && s.dataset.variant) ? ' (' + s.dataset.variant + ')' : '';
+          })() : '';
+          lines.push('• ' + qty + 'x ' + p.name + variantLabel + ' — ' + formatPrice(liveP * qty));
         });
         lines.push('');
         lines.push('Total: ' + formatPrice(cartTotal()));
@@ -908,6 +949,23 @@ Con un relleno de maní y en la deco un clásico bon o bon!</div>
     }
 
     renderCart();
-  </script>
+  
+  function selectVariant(btn, productId) {
+    // Update active button style
+    btn.closest('.variant-select').querySelectorAll('.variant-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    // Update displayed price
+    var price = parseInt(btn.dataset.price);
+    var label = btn.dataset.label;
+    var formatted = '$' + price.toLocaleString('es-AR');
+    document.getElementById('price-' + productId).textContent = formatted;
+    // Update stepper data so cart uses correct price/label
+    var stepper = document.querySelector('.qty-stepper[data-product="' + productId + '"]');
+    if (stepper) {
+      stepper.dataset.price = price;
+      stepper.dataset.variant = label;
+    }
+  }
+</script>
 </body>
 </html>
