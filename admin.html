@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mola Admin</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bordo: #3b0f12;
+    --amarillo: #fceaa6;
+    --violeta: #b796c5;
+    --azul: #88aec8;
+    --bg: #faf7f0;
+    --card: #ffffff;
+    --border: #ede8e0;
+    --text: #3b0f12;
+    --muted: #999;
+  }
+
+  body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  /* ── LOGIN ── */
+  #login-screen {
+    min-height: 100vh;
+    background: var(--bordo);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .login-inner {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+  .login-brand { text-align: center; }
+  .login-brand h1 { font-size: 28px; font-weight: bold; color: var(--amarillo); letter-spacing: 4px; }
+  .login-brand p { font-size: 11px; color: var(--amarillo); opacity: 0.5; letter-spacing: 3px; text-transform: uppercase; margin-top: 4px; }
+  .login-card {
+    background: white;
+    border-radius: 24px;
+    padding: 36px 32px;
+    width: 100%;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .field label { display: block; font-size: 11px; font-weight: bold; color: var(--bordo); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+  .field input {
+    width: 100%;
+    background: #f8f4f0;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: 15px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .field input:focus { border-color: var(--violeta); }
+  .btn-primary {
+    background: var(--bordo);
+    color: var(--amarillo);
+    border: none;
+    border-radius: 14px;
+    padding: 16px;
+    font-size: 16px;
+    font-weight: bold;
+    width: 100%;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: opacity 0.2s;
+  }
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+  .login-error { background: #fee2e2; color: #dc2626; border-radius: 10px; padding: 10px 14px; font-size: 13px; display: none; }
+  .login-note { text-align: center; font-size: 12px; color: var(--muted); }
+
+  /* ── APP ── */
+  #app-screen { display: none; flex-direction: column; min-height: 100vh; }
+
+  .top-bar {
+    background: var(--bordo);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    gap: 12px;
+  }
+  .top-bar-brand h2 { font-size: 18px; font-weight: bold; color: var(--amarillo); letter-spacing: 2px; }
+  .top-bar-brand p { font-size: 10px; color: var(--amarillo); opacity: 0.5; letter-spacing: 2px; text-transform: uppercase; }
+  .top-bar-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+  .btn-add {
+    background: var(--amarillo);
+    color: var(--bordo);
+    border: none;
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .btn-logout {
+    background: rgba(252,234,166,0.15);
+    color: var(--amarillo);
+    border: none;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+
+  /* ── LISTA ── */
+  #lista-view { flex: 1; }
+  .search-bar { padding: 14px 24px; background: white; border-bottom: 1px solid var(--border); }
+  .search-box {
+    background: #f3ede6;
+    border-radius: 10px;
+    padding: 11px 16px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    max-width: 480px;
+  }
+  .search-box input {
+    background: none;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    color: var(--text);
+    width: 100%;
+  }
+  .productos-grid {
+    padding: 20px 24px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+  }
+  .producto-card {
+    background: white;
+    border-radius: 16px;
+    padding: 16px;
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  }
+  .producto-card.inactivo { opacity: 0.45; }
+  .producto-thumb {
+    width: 72px;
+    height: 72px;
+    border-radius: 12px;
+    object-fit: cover;
+    flex-shrink: 0;
+    background: var(--amarillo);
+  }
+  .producto-thumb-placeholder {
+    width: 72px;
+    height: 72px;
+    border-radius: 12px;
+    background: var(--amarillo);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+  }
+  .producto-info { flex: 1; min-width: 0; }
+  .producto-nombre { font-size: 14px; font-weight: bold; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .producto-desc { font-size: 12px; color: var(--muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .producto-precio { font-size: 15px; font-weight: bold; color: var(--text); margin-top: 5px; display: flex; align-items: center; gap: 6px; }
+  .tag-promo { background: var(--amarillo); color: var(--bordo); font-size: 9px; font-weight: bold; padding: 2px 7px; border-radius: 20px; }
+  .tag-off { background: #e8e8e8; color: #666; font-size: 9px; font-weight: bold; padding: 2px 7px; border-radius: 20px; }
+  .producto-actions { display: flex; flex-direction: column; gap: 6px; flex-shrink: 0; }
+  .btn-edit { background: var(--violeta); color: white; border: none; border-radius: 8px; padding: 7px 11px; font-size: 11px; font-weight: bold; cursor: pointer; }
+  .btn-del { background: #fee2e2; color: #dc2626; border: none; border-radius: 8px; padding: 7px 11px; font-size: 11px; font-weight: bold; cursor: pointer; }
+  .empty-state { text-align: center; padding: 60px 24px; color: var(--muted); }
+  .empty-state p { font-size: 16px; margin-bottom: 8px; }
+  .empty-state span { font-size: 13px; }
+
+  /* ── FORMULARIO ── */
+  #form-view { display: none; flex: 1; }
+  .form-topbar {
+    background: var(--bordo);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .btn-back {
+    background: rgba(252,234,166,0.2);
+    border: none;
+    border-radius: 8px;
+    width: 36px;
+    height: 36px;
+    color: var(--amarillo);
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .form-title h2 { font-size: 17px; font-weight: bold; color: var(--amarillo); }
+  .form-title p { font-size: 10px; color: var(--amarillo); opacity: 0.5; text-transform: uppercase; letter-spacing: 2px; }
+
+  .form-wrap {
+    padding: 24px;
+    max-width: 640px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-bottom: 40px;
+  }
+  .form-card { background: white; border-radius: 16px; padding: 18px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+  .form-section-label { font-size: 11px; font-weight: bold; color: var(--bordo); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+  .form-field { display: flex; flex-direction: column; gap: 6px; }
+  .form-field label { font-size: 11px; font-weight: bold; color: var(--bordo); letter-spacing: 1px; text-transform: uppercase; }
+  .form-field input, .form-field textarea {
+    background: #f8f4f0;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: 15px;
+    color: var(--text);
+    outline: none;
+    font-family: inherit;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+  .form-field input:focus, .form-field textarea:focus { border-color: var(--violeta); }
+  .form-field textarea { min-height: 80px; resize: vertical; line-height: 1.5; }
+  .form-row { display: flex; gap: 12px; }
+  .form-row .form-field { flex: 1; }
+
+  /* Fotos */
+  .fotos-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-start; }
+  .foto-upload-btn {
+    width: 80px;
+    height: 80px;
+    border: 2px dashed var(--violeta);
+    border-radius: 12px;
+    background: #faf4ff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    gap: 3px;
+    flex-shrink: 0;
+  }
+  .foto-upload-btn span { font-size: 24px; color: var(--violeta); line-height: 1; }
+  .foto-upload-btn small { font-size: 9px; color: var(--violeta); text-align: center; }
+  #foto-input { display: none; }
+  .foto-preview {
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    object-fit: cover;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .foto-wrap { position: relative; width: 80px; height: 80px; flex-shrink: 0; }
+  .foto-wrap img { width: 80px; height: 80px; border-radius: 12px; object-fit: cover; display: block; }
+  .foto-del {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: #dc2626;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    line-height: 1;
+  }
+  .fotos-note { font-size: 11px; color: var(--muted); margin-top: 8px; }
+
+  /* Toggles */
+  .toggle-row { display: flex; align-items: center; justify-content: space-between; }
+  .toggle-info h4 { font-size: 14px; font-weight: bold; color: var(--text); }
+  .toggle-info p { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .toggle-switch {
+    width: 48px;
+    height: 28px;
+    border-radius: 14px;
+    background: #ddd;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.2s;
+    border: none;
+    flex-shrink: 0;
+  }
+  .toggle-switch.on { background: var(--bordo); }
+  .toggle-switch::after {
+    content: '';
+    width: 22px;
+    height: 22px;
+    background: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    transition: transform 0.2s;
+  }
+  .toggle-switch.on::after { transform: translateX(20px); }
+  .divider { border: none; border-top: 1px solid #f0ebe3; margin: 14px 0; }
+
+  .btn-save {
+    background: var(--bordo);
+    color: var(--amarillo);
+    border: none;
+    border-radius: 16px;
+    padding: 18px;
+    font-size: 16px;
+    font-weight: bold;
+    width: 100%;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: opacity 0.2s;
+  }
+  .btn-save:hover { opacity: 0.85; }
+  .btn-save:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* Toast */
+  #toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: #1a1a1a;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: bold;
+    z-index: 9999;
+    transition: transform 0.3s ease;
+    white-space: nowrap;
+  }
+  #toast.show { transform: translateX(-50%) translateY(0); }
+  #toast.success { background: #166534; }
+  #toast.error { background: #991b1b; }
+
+  @media (max-width: 480px) {
+    .top-bar { padding: 12px 16px; }
+    .productos-grid { padding: 14px 16px; gap: 10px; }
+    .search-bar { padding: 10px 16px; }
+    .form-wrap { padding: 16px; }
+    .form-row { flex-direction: column; }
+    .btn-add { padding: 8px 12px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-inner">
+    <div class="login-brand">
+      <h1>MOLA</h1>
+      <p>Panel Admin</p>
+    </div>
+    <div class="login-card">
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="tu@email.com" autocomplete="email">
+      </div>
+      <div class="field">
+        <label for="password">Contraseña</label>
+        <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <div class="login-error" id="login-error"></div>
+      <button class="btn-primary" id="btn-login">Ingresar →</button>
+      <p class="login-note">🔒 Solo la dueña puede acceder</p>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app-screen">
+  <!-- Header -->
+  <div class="top-bar">
+    <div class="top-bar-brand">
+      <h2>MOLA Admin</h2>
+      <p>Panel de productos</p>
+    </div>
+    <div class="top-bar-actions">
+      <button class="btn-add" id="btn-nuevo">+ Agregar</button>
+      <button class="btn-logout" id="btn-logout" title="Cerrar sesión">↩</button>
+    </div>
+  </div>
+
+  <!-- Lista -->
+  <div id="lista-view">
+    <div class="search-bar">
+      <div class="search-box">
+        <span>🔍</span>
+        <input type="text" id="search-input" placeholder="Buscar producto...">
+      </div>
+    </div>
+    <div class="productos-grid" id="productos-grid">
+      <div class="empty-state"><p>Cargando productos...</p></div>
+    </div>
+  </div>
+
+  <!-- Formulario -->
+  <div id="form-view">
+    <div class="form-topbar">
+      <button class="btn-back" id="btn-back">←</button>
+      <div class="form-title">
+        <h2 id="form-titulo">Agregar Producto</h2>
+        <p id="form-subtitulo">Nueva cookie</p>
+      </div>
+    </div>
+    <div class="form-wrap">
+      <input type="hidden" id="producto-id">
+
+      <!-- Fotos -->
+      <div class="form-card">
+        <div class="form-section-label">📸 Fotos del producto</div>
+        <div class="fotos-row" id="fotos-row">
+          <label class="foto-upload-btn" for="foto-input">
+            <span>+</span>
+            <small>Agregar foto</small>
+          </label>
+          <input type="file" id="foto-input" accept="image/*" multiple>
+        </div>
+        <div class="fotos-note">✂️ Las fotos se recortan en cuadrado automáticamente</div>
+      </div>
+
+      <!-- Nombre -->
+      <div class="form-field">
+        <label for="f-nombre">Nombre</label>
+        <input type="text" id="f-nombre" placeholder="Nombre del producto">
+      </div>
+
+      <!-- Descripción -->
+      <div class="form-field">
+        <label for="f-descripcion">Descripción</label>
+        <textarea id="f-descripcion" placeholder="Descripción del producto..."></textarea>
+      </div>
+
+      <!-- Precio + Tag -->
+      <div class="form-row">
+        <div class="form-field">
+          <label for="f-precio">Precio $</label>
+          <input type="number" id="f-precio" placeholder="0">
+        </div>
+        <div class="form-field">
+          <label for="f-tag">Etiqueta</label>
+          <input type="text" id="f-tag" placeholder="nuevo ✨, clásica...">
+        </div>
+      </div>
+
+      <!-- Toggles -->
+      <div class="form-card" style="display:flex;flex-direction:column;gap:0;">
+        <div class="toggle-row">
+          <div class="toggle-info">
+            <h4>Es promoción</h4>
+            <p>Muestra la etiqueta PROMO en la carta</p>
+          </div>
+          <button class="toggle-switch" id="toggle-promo" type="button"></button>
+        </div>
+        <div class="divider"></div>
+        <div class="toggle-row">
+          <div class="toggle-info">
+            <h4>Visible en la carta</h4>
+            <p>Si está apagado, no aparece en la página</p>
+          </div>
+          <button class="toggle-switch on" id="toggle-activo" type="button"></button>
+        </div>
+      </div>
+
+      <button class="btn-save" id="btn-save">💾 Guardar producto</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<!-- Canvas oculto para crop -->
+<canvas id="crop-canvas" style="display:none;"></canvas>
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+const SUPABASE_URL = 'https://zbcyzjvgzquetwbjigla.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_Qbh1QcVgl78F7MIDS8lNxA_mNU1-21Z';
+const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ── ESTADO ──
+let productosData = [];
+let fotosNuevas = []; // { file, dataUrl }
+let fotosExistentes = []; // URLs ya en Supabase
+
+// ── UTILS ──
+function toast(msg, tipo = 'success') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = `show ${tipo}`;
+  setTimeout(() => el.className = '', 2800);
+}
+
+function mostrar(id) {
+  document.getElementById('lista-view').style.display = id === 'lista' ? 'block' : 'none';
+  document.getElementById('form-view').style.display = id === 'form' ? 'flex' : 'none';
+  document.getElementById('form-view').style.flexDirection = 'column';
+}
+
+// ── CROP A CUADRADO ──
+function cropSquare(file) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      const size = Math.min(img.width, img.height);
+      const canvas = document.getElementById('crop-canvas');
+      canvas.width = 800;
+      canvas.height = 800;
+      const ctx = canvas.getContext('2d');
+      const sx = (img.width - size) / 2;
+      const sy = (img.height - size) / 2;
+      ctx.drawImage(img, sx, sy, size, size, 0, 0, 800, 800);
+      URL.revokeObjectURL(url);
+      canvas.toBlob(resolve, 'image/webp', 0.85);
+    };
+    img.src = url;
+  });
+}
+
+// ── SUBIR FOTO ──
+async function subirFoto(blob, nombre) {
+  const path = `${Date.now()}-${nombre}.webp`;
+  const { error } = await sb.storage.from('imagenes-productos').upload(path, blob, { contentType: 'image/webp' });
+  if (error) throw error;
+  const { data } = sb.storage.from('imagenes-productos').getPublicUrl(path);
+  return data.publicUrl;
+}
+
+// ── BORRAR FOTO DE STORAGE ──
+async function borrarFotoStorage(url) {
+  try {
+    const path = url.split('/imagenes-productos/')[1];
+    if (path) await sb.storage.from('imagenes-productos').remove([path]);
+  } catch (e) { console.warn('No se pudo borrar foto:', e); }
+}
+
+// ── RENDERIZAR FOTOS EN FORM ──
+function renderFotos() {
+  const row = document.getElementById('fotos-row');
+  // Limpiar previews anteriores
+  row.querySelectorAll('.foto-wrap').forEach(el => el.remove());
+
+  // Fotos existentes
+  fotosExistentes.forEach((url, i) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'foto-wrap';
+    wrap.innerHTML = `<img src="${url}" alt="foto"><button class="foto-del" data-tipo="existente" data-idx="${i}">×</button>`;
+    row.appendChild(wrap);
+  });
+
+  // Fotos nuevas (preview local)
+  fotosNuevas.forEach((f, i) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'foto-wrap';
+    wrap.innerHTML = `<img src="${f.dataUrl}" alt="foto nueva"><button class="foto-del" data-tipo="nueva" data-idx="${i}">×</button>`;
+    row.appendChild(wrap);
+  });
+
+  // Eventos borrar
+  row.querySelectorAll('.foto-del').forEach(btn => {
+    btn.onclick = () => {
+      const tipo = btn.dataset.tipo;
+      const idx = parseInt(btn.dataset.idx);
+      if (tipo === 'existente') fotosExistentes.splice(idx, 1);
+      else fotosNuevas.splice(idx, 1);
+      renderFotos();
+    };
+  });
+}
+
+// ── FOTO INPUT ──
+document.getElementById('foto-input').addEventListener('change', async (e) => {
+  const files = Array.from(e.target.files);
+  for (const file of files) {
+    const dataUrl = await new Promise(res => {
+      const r = new FileReader();
+      r.onload = ev => res(ev.target.result);
+      r.readAsDataURL(file);
+    });
+    fotosNuevas.push({ file, dataUrl });
+  }
+  renderFotos();
+  e.target.value = '';
+});
+
+// ── AUTH ──
+sb.auth.onAuthStateChange((event, session) => {
+  if (session) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app-screen').style.display = 'flex';
+    cargarProductos();
+  } else {
+    document.getElementById('login-screen').style.display = 'flex';
+    document.getElementById('app-screen').style.display = 'none';
+  }
+});
+
+document.getElementById('btn-login').addEventListener('click', async () => {
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const errEl = document.getElementById('login-error');
+  const btn = document.getElementById('btn-login');
+  errEl.style.display = 'none';
+  btn.disabled = true;
+  btn.textContent = 'Ingresando...';
+  const { error } = await sb.auth.signInWithPassword({ email, password });
+  if (error) {
+    errEl.textContent = 'Email o contraseña incorrectos';
+    errEl.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Ingresar →';
+  }
+});
+
+document.getElementById('email').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('password').focus(); });
+document.getElementById('password').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('btn-login').click(); });
+
+document.getElementById('btn-logout').addEventListener('click', async () => {
+  await sb.auth.signOut();
+});
+
+// ── CARGAR PRODUCTOS ──
+async function cargarProductos() {
+  const { data, error } = await sb.from('productos').select('*').order('orden').order('created_at');
+  if (error) { toast('Error al cargar productos', 'error'); return; }
+  productosData = data || [];
+  renderProductos(productosData);
+}
+
+function renderProductos(lista) {
+  const grid = document.getElementById('productos-grid');
+  if (!lista.length) {
+    grid.innerHTML = '<div class="empty-state"><p>🍪</p><p>No hay productos todavía</p><span>Tocá "Agregar" para empezar</span></div>';
+    return;
+  }
+  grid.innerHTML = lista.map(p => {
+    const thumb = p.fotos && p.fotos.length
+      ? `<img class="producto-thumb" src="${p.fotos[0]}" alt="${p.nombre}">`
+      : `<div class="producto-thumb-placeholder">🍪</div>`;
+    const precio = `$${p.precio.toLocaleString('es-AR')}`;
+    const badges = [
+      p.es_promo ? '<span class="tag-promo">PROMO</span>' : '',
+      !p.activo ? '<span class="tag-off">OCULTO</span>' : ''
+    ].join('');
+    return `
+      <div class="producto-card ${p.activo ? '' : 'inactivo'}">
+        ${thumb}
+        <div class="producto-info">
+          <div class="producto-nombre">${p.nombre}</div>
+          <div class="producto-desc">${p.descripcion || ''}</div>
+          <div class="producto-precio">${precio} ${badges}</div>
+        </div>
+        <div class="producto-actions">
+          <button class="btn-edit" onclick="editarProducto('${p.id}')">✏️ Editar</button>
+          <button class="btn-del" onclick="borrarProducto('${p.id}')">🗑️ Borrar</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// Búsqueda
+document.getElementById('search-input').addEventListener('input', (e) => {
+  const q = e.target.value.toLowerCase();
+  const filtrados = productosData.filter(p =>
+    p.nombre.toLowerCase().includes(q) || (p.descripcion || '').toLowerCase().includes(q)
+  );
+  renderProductos(filtrados);
+});
+
+// ── ABRIR FORM NUEVO ──
+document.getElementById('btn-nuevo').addEventListener('click', () => {
+  document.getElementById('producto-id').value = '';
+  document.getElementById('f-nombre').value = '';
+  document.getElementById('f-descripcion').value = '';
+  document.getElementById('f-precio').value = '';
+  document.getElementById('f-tag').value = '';
+  document.getElementById('form-titulo').textContent = 'Agregar Producto';
+  document.getElementById('form-subtitulo').textContent = 'Nueva cookie';
+  fotosNuevas = [];
+  fotosExistentes = [];
+  renderFotos();
+  setToggle('toggle-promo', false);
+  setToggle('toggle-activo', true);
+  mostrar('form');
+  window.scrollTo(0, 0);
+});
+
+// ── EDITAR ──
+window.editarProducto = (id) => {
+  const p = productosData.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('producto-id').value = p.id;
+  document.getElementById('f-nombre').value = p.nombre;
+  document.getElementById('f-descripcion').value = p.descripcion || '';
+  document.getElementById('f-precio').value = p.precio;
+  document.getElementById('f-tag').value = p.tag || '';
+  document.getElementById('form-titulo').textContent = 'Editar Producto';
+  document.getElementById('form-subtitulo').textContent = p.nombre;
+  fotosNuevas = [];
+  fotosExistentes = [...(p.fotos || [])];
+  renderFotos();
+  setToggle('toggle-promo', p.es_promo);
+  setToggle('toggle-activo', p.activo);
+  mostrar('form');
+  window.scrollTo(0, 0);
+};
+
+// ── BORRAR ──
+window.borrarProducto = async (id) => {
+  if (!confirm('¿Segura que querés borrar este producto?')) return;
+  const p = productosData.find(x => x.id === id);
+  if (p && p.fotos) {
+    for (const url of p.fotos) await borrarFotoStorage(url);
+  }
+  const { error } = await sb.from('productos').delete().eq('id', id);
+  if (error) { toast('Error al borrar', 'error'); return; }
+  toast('Producto borrado');
+  cargarProductos();
+};
+
+// ── VOLVER ──
+document.getElementById('btn-back').addEventListener('click', () => {
+  mostrar('lista');
+  cargarProductos();
+});
+
+// ── TOGGLES ──
+function setToggle(id, val) {
+  const el = document.getElementById(id);
+  el.classList.toggle('on', val);
+}
+function getToggle(id) {
+  return document.getElementById(id).classList.contains('on');
+}
+document.getElementById('toggle-promo').addEventListener('click', () => {
+  document.getElementById('toggle-promo').classList.toggle('on');
+});
+document.getElementById('toggle-activo').addEventListener('click', () => {
+  document.getElementById('toggle-activo').classList.toggle('on');
+});
+
+// ── GUARDAR ──
+document.getElementById('btn-save').addEventListener('click', async () => {
+  const nombre = document.getElementById('f-nombre').value.trim();
+  const precio = parseInt(document.getElementById('f-precio').value);
+  if (!nombre) { toast('Falta el nombre', 'error'); return; }
+  if (!precio || precio <= 0) { toast('Falta el precio', 'error'); return; }
+
+  const btn = document.getElementById('btn-save');
+  btn.disabled = true;
+  btn.textContent = 'Guardando...';
+
+  try {
+    // Subir fotos nuevas
+    const urlsNuevas = [];
+    for (const { file } of fotosNuevas) {
+      const blob = await cropSquare(file);
+      const url = await subirFoto(blob, nombre.replace(/\s+/g, '-').toLowerCase());
+      urlsNuevas.push(url);
+    }
+
+    const fotos = [...fotosExistentes, ...urlsNuevas];
+    const payload = {
+      nombre,
+      descripcion: document.getElementById('f-descripcion').value.trim() || null,
+      precio,
+      tag: document.getElementById('f-tag').value.trim() || null,
+      es_promo: getToggle('toggle-promo'),
+      activo: getToggle('toggle-activo'),
+      fotos
+    };
+
+    const id = document.getElementById('producto-id').value;
+    let error;
+    if (id) {
+      ({ error } = await sb.from('productos').update(payload).eq('id', id));
+    } else {
+      ({ error } = await sb.from('productos').insert(payload));
+    }
+
+    if (error) throw error;
+    toast(id ? 'Producto actualizado ✓' : 'Producto guardado ✓');
+    mostrar('lista');
+    cargarProductos();
+  } catch (e) {
+    console.error(e);
+    toast('Error al guardar: ' + e.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '💾 Guardar producto';
+  }
+});
+</script>
+</body>
+</html>
