@@ -508,6 +508,14 @@
           </div>
           <button class="toggle-switch on" id="toggle-activo" type="button"></button>
         </div>
+        <div class="divider"></div>
+        <div class="toggle-row">
+          <div class="toggle-info">
+            <h4>Opción con/sin helado 🍨</h4>
+            <p>Muestra los botones de variante en la carta</p>
+          </div>
+          <button class="toggle-switch" id="toggle-helado" type="button"></button>
+        </div>
       </div>
 
       <button class="btn-save" id="btn-save">💾 Guardar producto</button>
@@ -732,6 +740,7 @@ document.getElementById('btn-nuevo').addEventListener('click', () => {
   renderFotos();
   setToggle('toggle-promo', false);
   setToggle('toggle-activo', true);
+  setToggle('toggle-helado', false);
   mostrar('form');
   window.scrollTo(0, 0);
 });
@@ -752,6 +761,7 @@ window.editarProducto = (id) => {
   renderFotos();
   setToggle('toggle-promo', p.es_promo);
   setToggle('toggle-activo', p.activo);
+  setToggle('toggle-helado', p.tiene_variante_helado || false);
   mostrar('form');
   window.scrollTo(0, 0);
 };
@@ -789,6 +799,9 @@ document.getElementById('toggle-promo').addEventListener('click', () => {
 document.getElementById('toggle-activo').addEventListener('click', () => {
   document.getElementById('toggle-activo').classList.toggle('on');
 });
+document.getElementById('toggle-helado').addEventListener('click', () => {
+  document.getElementById('toggle-helado').classList.toggle('on');
+});
 
 // ── GUARDAR ──
 document.getElementById('btn-save').addEventListener('click', async () => {
@@ -818,6 +831,7 @@ document.getElementById('btn-save').addEventListener('click', async () => {
       tag: document.getElementById('f-tag').value.trim() || null,
       es_promo: getToggle('toggle-promo'),
       activo: getToggle('toggle-activo'),
+      tiene_variante_helado: getToggle('toggle-helado'),
       fotos
     };
 
