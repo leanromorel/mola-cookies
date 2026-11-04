@@ -396,14 +396,18 @@
     @media(max-width:700px){.recetario-grid{grid-template-columns:1fr;}}
 
     /* CUCHAREABLE VARIANTE */
-    .variant-select{display:flex;gap:0.4rem;margin-bottom:0.2rem;}
+    .variant-select{display:flex;gap:0.5rem;margin-bottom:0.3rem;}
     .variant-btn{
-      font-family:'Pally',sans-serif;font-weight:700;font-size:11px;
-      border:1.5px solid var(--bo);border-radius:20px;padding:3px 10px;
+      font-family:'Pally',sans-serif;font-weight:700;
+      border:1.5px solid var(--bo);border-radius:12px;padding:5px 10px;
       background:transparent;color:var(--bo);cursor:pointer;
-      transition:background 0.15s,color 0.15s;white-space:nowrap;
+      transition:background 0.15s,color 0.15s;
+      display:flex;flex-direction:column;align-items:center;gap:1px;
+      flex:1;
     }
     .variant-btn.active{background:var(--bo);color:var(--y1);}
+    .vb-label{font-size:11px;line-height:1.2;}
+    .vb-price{font-size:13px;font-weight:800;line-height:1.2;}
   </style>
 </head>
 <body>
@@ -732,12 +736,12 @@
         const promoHtml = p.es_promo ? '<div class="tag" style="background:var(--bo);color:var(--y1);">promo</div>' : '';
 
         /* variante helado solo para Cookie Cuchareable */
-        const isCuchareable = p.nombre.toLowerCase().includes('cuchareable');
+        const isCuchareable = p.tiene_variante_helado === true;
         const precioConHelado = p.precio + 1500;
         const variantHtml = isCuchareable
           ? '<div class="variant-select">' +
-              '<button class="variant-btn active" type="button" data-price="'+p.precio+'" data-label="sin helado" onclick="selectVariant(this,\''+pid+'\')">Sin helado — '+fmtPrice(p.precio)+'</button>' +
-              '<button class="variant-btn" type="button" data-price="'+precioConHelado+'" data-label="con helado 🍨" onclick="selectVariant(this,\''+pid+'\')">Con helado 🍨 — '+fmtPrice(precioConHelado)+'</button>' +
+              '<button class="variant-btn active" type="button" data-price="'+p.precio+'" data-label="sin helado" onclick="selectVariant(this,\''+pid+'\')"><span class="vb-label">Sin helado</span><span class="vb-price">'+fmtPrice(p.precio)+'</span></button>' +
+              '<button class="variant-btn" type="button" data-price="'+precioConHelado+'" data-label="con helado 🍨" onclick="selectVariant(this,\''+pid+'\')"><span class="vb-label">Con helado 🍨</span><span class="vb-price">'+fmtPrice(precioConHelado)+'</span></button>' +
             '</div>'
           : '';
 
