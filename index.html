@@ -730,13 +730,25 @@
         const delay = ['d1','d2','d3','d4'][idx % 4];
         const tagHtml = p.tag ? '<div class="tag">'+p.tag+'</div>' : '';
         const promoHtml = p.es_promo ? '<div class="tag" style="background:var(--bo);color:var(--y1);">promo</div>' : '';
+
+        /* variante helado solo para Cookie Cuchareable */
+        const isCuchareable = p.nombre.toLowerCase().includes('cuchareable');
+        const precioConHelado = p.precio + 1000;
+        const variantHtml = isCuchareable
+          ? '<div class="variant-select">' +
+              '<button class="variant-btn active" type="button" data-price="'+p.precio+'" data-label="sin helado" onclick="selectVariant(this,\''+pid+'\')">Sin helado</button>' +
+              '<button class="variant-btn" type="button" data-price="'+precioConHelado+'" data-label="con helado" onclick="selectVariant(this,\''+pid+'\')">Con helado 🍨 +$1.000</button>' +
+            '</div>'
+          : '';
+
         return '<div class="card reveal '+delay+'">' +
           buildGallery(p.fotos, p.nombre) +
           '<div class="name">'+p.nombre+'</div>' +
           '<div class="desc">'+(p.descripcion||'')+'</div>' +
           tagHtml + promoHtml +
+          variantHtml +
           '<div class="card-buy"><span class="card-price">'+fmtPrice(p.precio)+'</span>' +
-          '<div class="qty-stepper" data-product="'+pid+'">' +
+          '<div class="qty-stepper" data-product="'+pid+'" data-variant="sin helado">' +
             '<button class="qty-btn" data-action="minus" type="button" aria-label="Quitar uno">&#8722;</button>' +
             '<span class="qty-value">0</span>' +
             '<button class="qty-btn" data-action="plus" type="button" aria-label="Agregar uno">+</button>' +
